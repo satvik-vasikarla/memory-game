@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MemoryFlow</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">M</div>
+          <div>
+            <h1>MemoryFlow</h1>
+            <p>Learn by playing</p>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Primary">
+          <button class="nav-item active" data-view="dashboard">
+            <span>◉</span>
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-item" data-view="library">
+            <span>▣</span>
+            <span>Library</span>
+          </button>
+          <button class="nav-item" data-view="play">
+            <span>▶</span>
+            <span>Play</span>
+          </button>
+          <button class="nav-item" data-view="daily-review">
+            <span>⟳</span>
+            <span>Daily Review</span>
+          </button>
+          <button class="nav-item" data-view="progress">
+            <span>◔</span>
+            <span>Progress</span>
+          </button>
+          <button class="nav-item" data-view="achievements">
+            <span>★</span>
+            <span>Achievements</span>
+          </button>
+          <button class="nav-item" data-view="add-concept">
+            <span>＋</span>
+            <span>Add Concept</span>
+          </button>
+          <button class="nav-item" data-view="settings">
+            <span>⚙</span>
+            <span>Settings</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-card">
+          <p>Today’s focus</p>
+          <h3>API Basics</h3>
+          <p>3 concepts left to review</p>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Study OS</p>
+            <h2 id="pageTitle">Dashboard</h2>
+          </div>
+          <div class="topbar-actions">
+            <div class="mini-pill">
+              <span class="dot"></span>
+              <span id="streakBadge">Streak 4</span>
+            </div>
+            <button id="themeToggle" class="icon-button" aria-label="Toggle theme">🌙</button>
+          </div>
+        </header>
+
+        <section id="pageContent" class="page-content"></section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
