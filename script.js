@@ -876,9 +876,13 @@ function startGame(mode) {
       { id: `${concept.id}-back`, text: concept.definition, pairId: concept.id }
     ]);
     const cards = shuffle(pairs);
+satvik
     gameState = { mode, score: 0, moves: 0, timer: 0, cards, flipped: [], matched: [], completed: false, intervalId: null };
+    gameState = { mode, score: 0, moves: 0, timer: 0, cards, flipped: [], matched: [], completed: false, intervalId: null, startedAt: Date.now() };
+    if (gameState.intervalId) window.clearInterval(gameState.intervalId);
+main
     gameState.intervalId = window.setInterval(() => {
-      gameState.timer += 1;
+      gameState.timer = Math.floor((Date.now() - gameState.startedAt) / 1000);
       render();
     }, 1000);
     return;
