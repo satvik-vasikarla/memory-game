@@ -145,6 +145,10 @@ button {
 
 .main-panel {
   padding: 26px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .topbar {
@@ -217,6 +221,9 @@ button:hover {
 .page-content {
   display: grid;
   gap: 18px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
 }
 
 .hero,
