@@ -11,6 +11,12 @@
   --danger: #ff6f91;
   --border: rgba(255, 255, 255, 0.1);
   --shadow: 0 24px 60px rgba(3, 8, 20, 0.3);
+  --sidebar-bg: #0b1424;
+  --sidebar-bg-2: #111d33;
+  --sidebar-card-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-text: #f4f7ff;
+  --sidebar-muted: #90a5c8;
+  --sidebar-active: linear-gradient(135deg, rgba(108, 124, 255, 0.24), rgba(66, 215, 182, 0.18));
 }
 
 html[data-theme="light"] {
@@ -26,6 +32,12 @@ html[data-theme="light"] {
   --danger: #c43d68;
   --border: rgba(19, 33, 61, 0.12);
   --shadow: 0 18px 50px rgba(73, 89, 125, 0.12);
+  --sidebar-bg: #f7f9ff;
+  --sidebar-bg-2: #ffffff;
+  --sidebar-card-bg: #ffffff;
+  --sidebar-text: #17253e;
+  --sidebar-muted: #697590;
+  --sidebar-active: linear-gradient(135deg, rgba(90, 103, 255, 0.16), rgba(8, 179, 148, 0.14));
 }
 
 * {
@@ -35,7 +47,7 @@ html[data-theme="light"] {
 body {
   margin: 0;
   font-family: Inter, "Segoe UI", Roboto, sans-serif;
-  background: var(--bg);
+  background: linear-gradient(135deg, var(--bg), color-mix(in srgb, var(--panel-strong) 70%, var(--bg)));
   color: var(--text);
   min-height: 100vh;
 }
@@ -58,7 +70,7 @@ button {
 }
 
 .sidebar {
-  background: linear-gradient(180deg, rgba(16, 28, 49, 0.98), rgba(7, 15, 29, 0.96));
+  background: linear-gradient(180deg, var(--sidebar-bg), var(--sidebar-bg-2));
   border-right: 1px solid var(--border);
   padding: 24px 16px;
   display: flex;
@@ -67,6 +79,7 @@ button {
   position: sticky;
   top: 0;
   height: 100vh;
+  color: var(--sidebar-text);
 }
 
 .brand {
@@ -77,14 +90,14 @@ button {
 }
 
 .brand-mark {
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: block;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.16);
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  font-weight: 700;
-  font-size: 1.1rem;
 }
 
 .brand h1 {
@@ -95,7 +108,7 @@ button {
 .brand p {
   margin: 2px 0 0;
   font-size: 0.86rem;
-  color: var(--muted);
+  color: var(--sidebar-muted);
 }
 
 .nav-list {
@@ -108,7 +121,7 @@ button {
   border-radius: 14px;
   padding: 12px 14px;
   background: transparent;
-  color: var(--text);
+  color: var(--sidebar-text);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -117,7 +130,7 @@ button {
 
 .nav-item:hover,
 .nav-item.active {
-  background: rgba(108, 124, 255, 0.18);
+  background: var(--sidebar-active);
   transform: translateX(2px);
 }
 
@@ -125,8 +138,9 @@ button {
   margin-top: auto;
   padding: 16px;
   border-radius: 18px;
-  background: var(--panel);
+  background: var(--sidebar-card-bg);
   box-shadow: var(--shadow);
+  color: var(--sidebar-text);
 }
 
 .sidebar-card h3 {
@@ -134,12 +148,13 @@ button {
 }
 
 .sidebar-card p {
-  color: var(--muted);
+  color: var(--sidebar-muted);
   margin: 0;
 }
 
 .main-panel {
   padding: 26px;
+  background: transparent;
 }
 
 .topbar {
@@ -188,6 +203,14 @@ button {
 .small-button,
 .board-button {
   padding: 10px 14px;
+}
+
+.theme-toggle-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+  border-radius: 50%;
 }
 
 .primary-button,

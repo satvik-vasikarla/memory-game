@@ -4,7 +4,7 @@ const defaultState = {
   sound: true,
   animations: true,
   user: {
-    name: 'Ava',
+    name: 'John',
     xp: 640,
     level: 7,
     streak: 4,
@@ -247,8 +247,12 @@ function bindEvents() {
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', state.theme);
   const themeButton = document.getElementById('themeToggle');
-  if (themeButton) {
-    themeButton.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+  const themeIcon = document.getElementById('themeToggleIcon');
+  if (themeButton && themeIcon) {
+    const isDark = state.theme === 'dark';
+    themeIcon.src = isDark ? 'canva-watercolor-illustration-of-a-bright-sun-MAG_TOzBgjg.webp' : '7184508.png';
+    themeIcon.alt = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+    themeButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
   }
 }
 
@@ -525,6 +529,7 @@ function renderActiveGame() {
     `;
   }
 
+  const isTypeMode = current.kind === 'type-the-answer';
   return `
     <div class="card" style="margin-top: 16px;">
       <div class="game-header">
@@ -534,7 +539,7 @@ function renderActiveGame() {
         </div>
         <div class="mini-pill">${gameState.currentQuestion + 1}/${gameState.questions.length}</div>
       </div>
-      ${gameState.mode === 'type-the-answer' ? `
+      ${isTypeMode ? `
         <div class="choice-list">
           <input id="freeResponse" placeholder="Type the definition" />
           <button class="primary-button" data-action="submit-answer">Submit answer</button>
@@ -861,7 +866,10 @@ function showToast(message) {
 }
 
 function startGame(mode) {
-  gameState = { mode, score: 0, currentQuestion: 0, questions: buildQuestions(mode), completed: false };
+  if (gameState?.intervalId) {
+    window.clearInterval(gameState.intervalId);
+  }
+
   if (mode === 'memory-match') {
     const pairs = state.concepts.slice(0, 6).flatMap((concept) => [
       { id: `${concept.id}-front`, text: concept.title, pairId: concept.id },
@@ -869,30 +877,60 @@ function startGame(mode) {
     ]);
     const cards = shuffle(pairs);
     gameState = { mode, score: 0, moves: 0, timer: 0, cards, flipped: [], matched: [], completed: false, intervalId: null };
-    if (gameState.intervalId) window.clearInterval(gameState.intervalId);
     gameState.intervalId = window.setInterval(() => {
       gameState.timer += 1;
       render();
     }, 1000);
+    return;
   }
+
+  gameState = { mode, score: 0, currentQuestion: 0, questions: buildQuestions(mode), completed: false };
 }
 
 function buildQuestions(mode) {
-  const base = state.concepts.slice(0, 5);
+  const base = state.concepts.slice(0, 6);
   if (mode === 'type-the-answer') {
-    return base.map((concept) => ({ prompt: `What is the definition of ${concept.title}?`, answer: concept.definition, options: [] }));
+    return base.map((concept) => ({ kind: 'type-the-answer', prompt: `What is the definition of ${concept.title}?`, answer: concept.definition, options: [] }));
   }
-  return base.map((concept) => {
+
+  if (mode === 'speed-round') {
+    return base.slice(0, 4).map((concept) => {
+      const distractors = state.concepts.filter((entry) => entry.id !== concept.id).slice(0, 2).map((entry) => entry.definition);
+      const options = shuffle([concept.definition, ...distractors]).slice(0, 3);
+      return { kind: 'multiple-choice', prompt: `Speed round: which definition fits ${concept.title}?`, answer: concept.definition, options };
+    });
+  }
+
+  if (mode === 'mixed-challenge') {
+    return base.slice(0, 4).map((concept, index) => {
+      if (index % 2 === 0) {
+        const distractors = state.concepts.filter((entry) => entry.id !== concept.id).slice(0, 2).map((entry) => entry.definition);
+        return { kind: 'multiple-choice', prompt: `Mixed challenge: which definition fits ${concept.title}?`, answer: concept.definition, options: shuffle([concept.definition, ...distractors]).slice(0, 3) };
+      }
+      return { kind: 'type-the-answer', prompt: `Mixed challenge: type the definition of ${concept.title}`, answer: concept.definition, options: [] };
+    });
+  }
+
+  return base.slice(0, 4).map((concept) => {
     const distractors = state.concepts.filter((entry) => entry.id !== concept.id).slice(0, 3).map((entry) => entry.definition);
     const options = shuffle([concept.definition, ...distractors]).slice(0, 4);
-    return { prompt: `Which definition fits ${concept.title}?`, answer: concept.definition, options };
+    return { kind: 'multiple-choice', prompt: `Which definition fits ${concept.title}?`, answer: concept.definition, options };
   });
+}
+
+function normalizeText(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
 function answerChallenge(option) {
   if (!gameState || gameState.completed) return;
   const current = gameState.questions[gameState.currentQuestion];
-  const isCorrect = current.answer.toLowerCase() === option.toLowerCase() || option.toLowerCase().includes(current.answer.toLowerCase().split(' ')[0]);
+  if (!current) return;
+
+  const isCorrect = current.kind === 'type-the-answer'
+    ? normalizeText(option || '') === normalizeText(current.answer)
+    : normalizeText(option || '') === normalizeText(current.answer);
+
   if (isCorrect) {
     gameState.score += 100;
     state.user.xp += 25;
@@ -931,6 +969,10 @@ function selectMemoryCard(cardId) {
       gameState.matched.push(firstId, secondId);
       gameState.flipped = [];
       if (gameState.matched.length === gameState.cards.length) {
+        if (gameState.intervalId) {
+          window.clearInterval(gameState.intervalId);
+          gameState.intervalId = null;
+        }
         gameState.completed = true;
         state.user.xp += 80;
         state.stats.gamesPlayed += 1;
