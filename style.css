@@ -11,10 +11,6 @@
   --danger: #ff6f91;
   --border: rgba(255, 255, 255, 0.1);
   --shadow: 0 24px 60px rgba(3, 8, 20, 0.3);
-<<<<<<< HEAD
-=======
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
   --sidebar-bg: #0b1424;
   --sidebar-bg-2: #111d33;
   --sidebar-card-bg: rgba(255, 255, 255, 0.08);
@@ -23,20 +19,12 @@
   --sidebar-active: linear-gradient(135deg, rgba(108, 124, 255, 0.24), rgba(66, 215, 182, 0.18));
   --sidebar-start: rgba(16, 28, 49, 0.98);
   --sidebar-end: rgba(7, 15, 29, 0.96);
-<<<<<<< HEAD
-=======
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
 }
 
 html[data-theme="light"] {
   color-scheme: light;
   --bg: #f2f5fb;
   --panel: #ffffff;
-<<<<<<< HEAD
-=======
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
   --panel-strong: #f8fbff;
   --text: #13213d;
   --muted: #5f6f8f;
@@ -54,10 +42,6 @@ html[data-theme="light"] {
   --sidebar-active: linear-gradient(135deg, rgba(90, 103, 255, 0.16), rgba(8, 179, 148, 0.14));
   --sidebar-start: #f5f8ff;
   --sidebar-end: #e9efff;
-<<<<<<< HEAD
-=======
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
 }
 
 * {
@@ -90,14 +74,7 @@ button {
 }
 
 .sidebar {
-<<<<<<< HEAD
   background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
-=======
-
-  background: linear-gradient(180deg, var(--sidebar-bg), var(--sidebar-bg-2));
-  background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
   border-right: 1px solid var(--border);
   padding: 24px 16px;
   display: flex;
@@ -165,16 +142,8 @@ button {
   margin-top: auto;
   padding: 16px;
   border-radius: 18px;
-<<<<<<< HEAD
-=======
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
   background: var(--sidebar-card-bg);
   border: 1px solid var(--border);
-<<<<<<< HEAD
-=======
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
   box-shadow: var(--shadow);
   color: var(--sidebar-text);
 }
@@ -190,10 +159,6 @@ button {
 
 .main-panel {
   padding: 26px;
-<<<<<<< HEAD
-=======
-
->>>>>>> d02520805bf9aded3147d82dfb506b7cd001d8b6
   background: transparent;
   display: flex;
   flex-direction: column;
