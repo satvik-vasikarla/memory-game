@@ -1,8 +1,8 @@
 const STORAGE_KEY = 'memory-flow-state-v1';
 const defaultState = {
-  theme: 'dark',
-  sound: true,
-  animations: true,
+  theme: 'light',
+  sound: false,
+  animations: false,
   user: {
     name: 'John',
     xp: 640,
@@ -198,19 +198,9 @@ function bindEvents() {
       saveState();
       render();
     }
-    if (actionName === 'toggle-sound') {
-      state.sound = !state.sound;
-      saveState();
-      render();
-    }
-    if (actionName === 'toggle-animation') {
-      state.animations = !state.animations;
-      saveState();
-      render();
-    }
     if (actionName === 'reset-progress') {
       state = structuredClone(defaultState);
-      state.theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      state.theme = document.documentElement.getAttribute('data-theme') || 'light';
       state.ui.currentView = 'dashboard';
       saveState();
       applyTheme();
@@ -223,12 +213,22 @@ function bindEvents() {
     state.theme = state.theme === 'dark' ? 'light' : 'dark';
     applyTheme();
     saveState();
+    render();
   });
 
   document.addEventListener('submit', (event) => {
     if (event.target.id === 'conceptForm') {
       event.preventDefault();
       saveConceptForm(event.target);
+    }
+  });
+
+  document.addEventListener('change', (event) => {
+    if (event.target.id === 'categorySelect') {
+      const customInput = document.getElementById('categoryCustom');
+      if (customInput) {
+        customInput.style.display = event.target.value === '__new__' ? 'block' : 'none';
+      }
     }
   });
 
@@ -667,6 +667,12 @@ function renderAchievements() {
 
 function renderAddConcept() {
   const concept = state.concepts.find((entry) => entry.id === state.ui.editingConceptId) || null;
+  const existingCategories = [...new Set(state.concepts.map((entry) => entry.category).filter(Boolean))].sort();
+  const selectedCategory = concept?.category || '';
+  const categoryOptions = existingCategories
+    .map((category) => `<option value="${category}" ${selectedCategory === category ? 'selected' : ''}>${category}</option>`)
+    .join('');
+  const showCustomCategory = Boolean(selectedCategory) && !existingCategories.includes(selectedCategory);
   return `
     <div class="form-card">
       <div class="section-heading">
@@ -684,7 +690,18 @@ function renderAddConcept() {
           </label>
           <label>
             <span>Category</span>
-            <input name="category" required value="${concept ? concept.category : ''}" />
+            <select name="categorySelect" id="categorySelect" required>
+              <option value="" ${!selectedCategory ? 'selected' : ''}>Choose a category</option>
+              ${categoryOptions}
+              <option value="__new__" ${showCustomCategory ? 'selected' : ''}>New category…</option>
+            </select>
+            <input
+              name="categoryCustom"
+              id="categoryCustom"
+              placeholder="Enter a new category"
+              value="${showCustomCategory ? selectedCategory : ''}"
+              style="margin-top: 8px; display: ${showCustomCategory ? 'block' : 'none'};"
+            />
           </label>
           <label>
             <span>Definition</span>
@@ -723,8 +740,6 @@ function renderSettings() {
       </div>
       <div class="review-list">
         <div class="check-row"><span>Light / Dark mode</span><button class="small-button" id="themeSettingButton" data-action="toggle-theme">${state.theme === 'dark' ? 'Dark' : 'Light'}</button></div>
-        <div class="check-row"><span>Sound effects</span><button class="small-button" data-action="toggle-sound">${state.sound ? 'On' : 'Off'}</button></div>
-        <div class="check-row"><span>Animations</span><button class="small-button" data-action="toggle-animation">${state.animations ? 'On' : 'Off'}</button></div>
         <div class="check-row"><span>Reset progress</span><button class="small-button" data-action="reset-progress">Reset</button></div>
       </div>
     </div>
@@ -736,7 +751,9 @@ function saveConceptForm(form) {
   const values = Object.fromEntries(formData.entries());
   const title = values.title.trim();
   const definition = values.definition.trim();
-  const category = values.category.trim();
+  const categorySelect = values.categorySelect || '';
+  const categoryCustom = values.categoryCustom?.trim() || '';
+  const category = categorySelect === '__new__' ? categoryCustom : categorySelect;
   const difficulty = values.difficulty || 'Easy';
   const tags = values.tags.split(',').map((tag) => tag.trim()).filter(Boolean);
 
@@ -876,11 +893,8 @@ function startGame(mode) {
       { id: `${concept.id}-back`, text: concept.definition, pairId: concept.id }
     ]);
     const cards = shuffle(pairs);
-satvik
-    gameState = { mode, score: 0, moves: 0, timer: 0, cards, flipped: [], matched: [], completed: false, intervalId: null };
     gameState = { mode, score: 0, moves: 0, timer: 0, cards, flipped: [], matched: [], completed: false, intervalId: null, startedAt: Date.now() };
     if (gameState.intervalId) window.clearInterval(gameState.intervalId);
-main
     gameState.intervalId = window.setInterval(() => {
       gameState.timer = Math.floor((Date.now() - gameState.startedAt) / 1000);
       render();
