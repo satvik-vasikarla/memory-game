@@ -284,6 +284,9 @@ function render() {
     case 'settings':
       content.innerHTML = renderSettings();
       break;
+    case 'contact':
+      content.innerHTML = renderContact();
+      break;
     default:
       content.innerHTML = renderDashboard();
       break;
@@ -310,6 +313,7 @@ function viewTitle(view) {
     progress: 'Progress',
     achievements: 'Achievements',
     'add-concept': 'Add Concept',
+    contact: 'Contact',
     settings: 'Settings'
   };
   return labels[view] || 'Dashboard';
@@ -708,6 +712,73 @@ function renderAddConcept() {
           <button class="secondary-button" type="button" data-view="library">Cancel</button>
         </div>
       </form>
+    </div>
+  `;
+}
+
+function renderContact() {
+  const contacts = [
+    { name: 'Edgar Solis', role: 'Front-End Developer', email: 'solisedgar365@gmail.com', focus: 'Build interface features' },
+    { name: 'Satvik', role: 'product lead', email: '', focus: 'Coordinate the project and maintain the roadmap.' },
+    { name: 'quinton', role: 'QA & Documentation', email: '', focus: 'Test features, track issues, and maintain project documentation.' },
+    { name: 'Thiago', role: 'GitHub & Integration Lead', email: '', focus: 'Practice GitHub collaboration and repository management.' },
+    { name: 'Andre', role: 'UX/UI Designer', email: '', focus: 'Design layouts and user flows.' }
+  ];
+
+  return `
+    <div class="page-content">
+      <div class="card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Reach out</p>
+            <h4>Contact the MemoryFlow team</h4>
+          </div>
+          <span class="badge">5 people</span>
+        </div>
+        <p>Choose the right person for your question, feedback, or idea.</p>
+        <div class="concept-grid" style="margin-top: 14px;">
+          ${contacts.map((contact) => `
+            <article class="concept-card">
+              <div class="section-heading">
+                <h4>${contact.name}</h4>
+                <span class="badge">${contact.role}</span>
+              </div>
+              <p>${contact.focus}</p>
+              <div class="review-list">
+                <div class="check-row"><span>Email</span><strong>${contact.email}</strong></div>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Send a message</p>
+            <h4>We’d love to hear from you</h4>
+          </div>
+        </div>
+        <form id="contactForm">
+          <div class="form-grid">
+            <label>
+              <span>Your name</span>
+              <input name="name" required placeholder="Ava" />
+            </label>
+            <label>
+              <span>Email address</span>
+              <input name="email" type="email" required placeholder="you@example.com" />
+            </label>
+          </div>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="5" required placeholder="Tell us what you need help with..."></textarea>
+          </label>
+          <div class="section-heading">
+            <button class="primary-button" type="submit">Send message</button>
+          </div>
+        </form>
+      </div>
     </div>
   `;
 }
