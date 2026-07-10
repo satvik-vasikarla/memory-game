@@ -735,11 +735,11 @@ function renderAddConcept() {
 
 function renderContact() {
   const contacts = [
-    { name: 'Edgar Solis', role: 'Front-End Developer', email: 'solisedgar365@gmail.com', focus: 'Build interface features' },
-    { name: 'Satvik', role: 'product lead', email: '', focus: 'Coordinate the project and maintain the roadmap.' },
-    { name: 'quinton', role: 'QA & Documentation', email: '', focus: 'Test features, track issues, and maintain project documentation.' },
-    { name: 'Thiago', role: 'GitHub & Integration Lead', email: '', focus: 'Practice GitHub collaboration and repository management.' },
-    { name: 'Andre', role: 'UX/UI Designer', email: '', focus: 'Design layouts and user flows.' }
+    { name: 'Edgar', role: 'Front-End Developer', email: 'solisedgar365@gmail.com', focus: 'Build interface features' },
+    { name: 'Satvik', role: 'Product Lead', email: 'satvik.vasikarla@gmail.com', focus: 'Coordinate the project and maintain the roadmap.' },
+    { name: 'Quinton', role: 'QA & Documentation', email: 'kindowhinters@gmail.com', focus: 'Test features, track issues, and maintain project documentation.' },
+    { name: 'Thiago', role: 'GitHub & Integration Lead', email: 'thiago.silva@gmail.com', focus: 'Practice GitHub collaboration and repository management.' },
+    { name: 'Andre', role: 'UX/UI Designer', email: 'ag3339114@gmail.com', focus: 'Design layouts and user flows.' }
   ];
 
   return `
